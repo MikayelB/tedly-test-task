@@ -1,14 +1,11 @@
-import type { NextPage } from 'next';
-import Head from 'next/head';
+import Layout from "../components/Layout";
 
-const Home: NextPage = () => {
+export default function Home() {
   return (
-    <>
-      <Head>
-        <title>Dashboard</title>
-      </Head>
-    </>
+    <Layout>
+      <div className="text-gray-800">
+        <h2 className="text-xl font-semibold">All Projects</h2>
+      </div>
+    </Layout>
   );
-};
-
-export default Home;
+}
