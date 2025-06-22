@@ -1,4 +1,4 @@
-import { Html, Head, Main, NextScript } from "next/document";
+import { Head, Html, Main, NextScript } from "next/document";
 
 const Document = () => {
   return (
@@ -8,6 +8,7 @@ const Document = () => {
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
+        <title>Dashboard</title>
       </Head>
       <body>
         <Main />
