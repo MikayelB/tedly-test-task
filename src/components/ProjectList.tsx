@@ -1,6 +1,5 @@
 "use client";
 
-// import Avatar from "@mui/material/Avatar";
 import { mockProjects } from "../../data/mockProjects";
 import PlusSign from "../icons/plus-sign.svg";
 import Search from "../icons/search.svg";
@@ -9,6 +8,7 @@ import ProjectRow, { Project } from "./ProjectRow";
 const ProjectList = () => {
   return (
     <div className="p-6">
+      {/* Filters + Search + New Project */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold">Projects</h2>
         <div className="flex gap-[8px]">
