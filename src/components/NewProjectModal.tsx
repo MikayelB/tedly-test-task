@@ -19,6 +19,7 @@ const NewProjectModal = ({
     unit: "",
     room: "",
     price: "",
+    note: "",
   });
 
   if (!isOpen) return null;
@@ -102,6 +103,14 @@ const NewProjectModal = ({
               value={formData.price}
               onChange={(e) =>
                 setFormData({ ...formData, price: e.target.value })
+              }
+            />
+            <textarea
+              placeholder="Int. Note"
+              className="w-full p-2 border rounded h-24"
+              value={formData.note}
+              onChange={(e) =>
+                setFormData({ ...formData, note: e.target.value })
               }
             />
           </div>
