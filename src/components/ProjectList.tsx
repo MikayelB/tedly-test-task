@@ -3,8 +3,8 @@
 import { useMemo, useState } from "react";
 import { mockProjects } from "../../data/mockProjects";
 import PlusSign from "../icons/plus-sign.svg";
-import Search from "../icons/search.svg";
 import FilterButtons from "./FilterButtons";
+import NewProjectModal from "./NewProjectModal";
 import ProjectRow from "./ProjectRow";
 import SearchButton from "./SearchButton";
 
@@ -21,7 +21,13 @@ const getStatusCounts = () => {
 const ProjectList = () => {
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const counts = getStatusCounts();
+
+  const handleCreateProject = (projectData: any) => {
+    // Add API call later
+    console.log("Creating project:", projectData);
+  };
 
   const filteredProjects = useMemo(() => {
     let projects =
@@ -48,7 +54,10 @@ const ProjectList = () => {
         />
         <div className="flex gap-[8px]">
           <SearchButton onSearch={setSearchTerm} />
-          <button className="flex items-center gap-[8px] bg-gray-900 leading-none text-sm font-semibold text-white px-4 py-2 rounded-[28px] shadow-xl  hover:bg-gray-800 ">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-[8px] bg-gray-900 leading-none text-sm font-semibold text-white px-4 py-2 rounded-[28px] shadow-xl  hover:bg-gray-800 "
+          >
             <PlusSign /> Add Project
           </button>
         </div>
@@ -70,6 +79,11 @@ const ProjectList = () => {
           <ProjectRow key={project.id} project={project} />
         ))}
       </div>
+      <NewProjectModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleCreateProject}
+      />
     </div>
   );
 };
