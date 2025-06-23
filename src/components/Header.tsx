@@ -8,14 +8,16 @@ const Header = () => {
         Projects
       </h1>
       <div className="flex items-center gap-[24px]">
-        <div className="flex items-center justify-center w-[40px] h-[40px] bg-white rounded-[29px] border border-gray-100">
+        <button className="flex items-center justify-center w-[40px] h-[40px] bg-white rounded-[29px] border border-gray-100">
           <Notifications />
-        </div>
-        <img
-          src="/images/user.png"
-          alt="User"
-          className="w-[40px] h-[40px] rounded-full object-cover object-center border border-gray-200"
-        />
+        </button>
+        <button>
+          <img
+            src="/images/user.png"
+            alt="User"
+            className="w-[40px] h-[40px] rounded-full object-cover object-center border border-gray-200"
+          />
+        </button>
       </div>
     </header>
   );

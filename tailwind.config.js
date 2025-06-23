@@ -19,6 +19,9 @@ module.exports = {
           // },
         },
       },
+      gridTemplateColumns: {
+        project: "1.2fr 1fr 1.5fr 1.5fr 1fr 0.75fr",
+      },
     },
   },
   plugins: [],
