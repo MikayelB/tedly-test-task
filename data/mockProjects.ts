@@ -69,4 +69,18 @@ export const mockProjects: Project[] = [
     price: "12,000",
     note: "test",
   },
+  {
+    id: 5,
+    name: "Test Search",
+    description: "Plumbing",
+    date: "01/01/2025",
+    status: "active",
+    stage: "Under review",
+    assignee: "Qarea Reno LLC",
+    property: "1234 Maple Grove Lane, Suite 101, Springfield, IL 62704",
+    // unit: "Unit 1",
+    room: "Bedroom",
+    price: "12,000",
+    note: "test",
+  },
 ];

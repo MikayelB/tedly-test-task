@@ -6,6 +6,7 @@ import PlusSign from "../icons/plus-sign.svg";
 import Search from "../icons/search.svg";
 import FilterButtons from "./FilterButtons";
 import ProjectRow from "./ProjectRow";
+import SearchButton from "./SearchButton";
 
 const getStatusCounts = () => {
   const all = mockProjects.length;
@@ -19,12 +20,22 @@ const getStatusCounts = () => {
 
 const ProjectList = () => {
   const [activeFilter, setActiveFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
   const counts = getStatusCounts();
 
   const filteredProjects = useMemo(() => {
-    if (activeFilter === "all") return mockProjects;
-    return mockProjects.filter((project) => project.status === activeFilter);
-  }, [activeFilter]);
+    let projects =
+      activeFilter === "all"
+        ? mockProjects
+        : mockProjects.filter((project) => project.status === activeFilter);
+
+    if (searchTerm) {
+      projects = projects.filter((project) =>
+        project.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    return projects;
+  }, [activeFilter, searchTerm]);
 
   return (
     <div className="p-6">
@@ -36,9 +47,7 @@ const ProjectList = () => {
           onFilterChange={setActiveFilter}
         />
         <div className="flex gap-[8px]">
-          <button className="flex items-center justify-center  bg-white rounded-[29px] ">
-            <Search />
-          </button>
+          <SearchButton onSearch={setSearchTerm} />
           <button className="flex items-center gap-[8px] bg-gray-900 leading-none text-sm font-semibold text-white px-4 py-2 rounded-[28px] shadow-xl  hover:bg-gray-800 ">
             <PlusSign /> Add Project
           </button>
