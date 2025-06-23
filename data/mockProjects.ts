@@ -1,4 +1,17 @@
-import { Project } from "../src/components/ProjectRow";
+export interface Project {
+  id: number;
+  name: string;
+  description: string;
+  date: string;
+  status: string;
+  stage: string;
+  assignee?: string;
+  property?: string;
+  unit?: string;
+  room?: string;
+  price?: string;
+  note?: string;
+}
 
 export const mockProjects: Project[] = [
   {

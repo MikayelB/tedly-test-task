@@ -1,25 +1,12 @@
 ("use client");
 
+import { Project } from "../../data/mockProjects";
 import Arrow from "../icons/arrow-data-transfer-horizontal.svg";
 import CopyBtn from "../icons/copy.svg";
 import UserBlank from "../icons/user-multiple.svg";
 import Avatar from "./Avatar";
 import ProgressBar from "./ProgressBar";
 
-export interface Project {
-  id: number;
-  name: string;
-  description: string;
-  date: string;
-  status: string;
-  stage: string;
-  assignee?: string;
-  property?: string;
-  unit?: string;
-  room?: string;
-  price?: string;
-  note?: string;
-}
 
 interface ProjectRowProps {
   project: Project;

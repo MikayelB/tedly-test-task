@@ -1,18 +1,42 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import { mockProjects } from "../../data/mockProjects";
 import PlusSign from "../icons/plus-sign.svg";
 import Search from "../icons/search.svg";
-import ProjectRow, { Project } from "./ProjectRow";
+import FilterButtons from "./FilterButtons";
+import ProjectRow from "./ProjectRow";
+
+const getStatusCounts = () => {
+  const all = mockProjects.length;
+
+  const active = mockProjects.filter((p) => p.status === "active").length;
+  const completed = mockProjects.filter((p) => p.status === "completed").length;
+  const archived = mockProjects.filter((p) => p.status === "archived").length;
+
+  return { all, active, completed, archived };
+};
 
 const ProjectList = () => {
+  const [activeFilter, setActiveFilter] = useState("all");
+  const counts = getStatusCounts();
+
+  const filteredProjects = useMemo(() => {
+    if (activeFilter === "all") return mockProjects;
+    return mockProjects.filter((project) => project.status === activeFilter);
+  }, [activeFilter]);
+
   return (
     <div className="p-6">
       {/* Filters + Search + New Project */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold">Projects</h2>
+        <FilterButtons
+          counts={counts}
+          activeFilter={activeFilter}
+          onFilterChange={setActiveFilter}
+        />
         <div className="flex gap-[8px]">
-          <button className="flex items-center justify-center w-[40px] h-[40px] bg-white rounded-[29px] ">
+          <button className="flex items-center justify-center  bg-white rounded-[29px] ">
             <Search />
           </button>
           <button className="flex items-center gap-[8px] bg-gray-900 leading-none text-sm font-semibold text-white px-4 py-2 rounded-[28px] shadow-xl  hover:bg-gray-800 ">
@@ -33,11 +57,9 @@ const ProjectList = () => {
         </div>
 
         {/* Project Cards */}
-        <div className="flex flex-col ml-[31px]">
-          {mockProjects.map((project: Project) => (
-            <ProjectRow key={project.id} project={project} />
-          ))}{" "}
-        </div>
+        {filteredProjects.map((project) => (
+          <ProjectRow key={project.id} project={project} />
+        ))}
       </div>
     </div>
   );
