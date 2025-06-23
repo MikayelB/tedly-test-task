@@ -1,0 +1,48 @@
+{
+  "kind": "collectionType",
+  "collectionName": "projects",
+  "info": {
+    "singularName": "project",
+    "pluralName": "projects",
+    "displayName": "Project"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "Description": {
+      "type": "text"
+    },
+    "Date": {
+      "type": "date"
+    },
+    "Stage": {
+      "type": "string"
+    },
+    "Property": {
+      "type": "text"
+    },
+    "Unit": {
+      "type": "string"
+    },
+    "Room": {
+      "type": "string"
+    },
+    "Price": {
+      "type": "biginteger"
+    },
+    "Note": {
+      "type": "text"
+    },
+    "assignee": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::employee.employee",
+      "inversedBy": "projects"
+    }
+  }
+}
