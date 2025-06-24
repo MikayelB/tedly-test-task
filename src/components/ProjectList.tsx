@@ -95,11 +95,16 @@ const ProjectList = () => {
           <div>Price</div>
           <div>Int.note</div>
         </div>
-
         {/* Project Cards */}
-        {filteredProjects.map((project) => (
-          <ProjectRow key={project.id} project={project} />
-        ))}
+        {filteredProjects.length === 0 ? (
+          <span className="flex flex-col items-center justify-center text-gray-900 p-10">
+            No projects found, create one with the button.
+          </span>
+        ) : (
+          filteredProjects.map((project) => (
+            <ProjectRow key={project.id} project={project} />
+          ))
+        )}
       </div>
       <NewProjectModal
         isOpen={isModalOpen}
