@@ -1,15 +1,15 @@
 # How to run the project
-## 1. Clone repo
+## 1. Clone the Repository
 ```git clone ...```
 
-## 2. Start services
+## 2. Start Services
 Go to the project root and in terminal run:
 ```docker compose up --build```
 
 Note: if you get an error like this 
 ```...tedly-test-task is not shared from the host and is not known to Docker```
 
-Open your docker settings -> Resources -> File Sharing and in the "Virtual file shares" section add the project root folder to the list.
+Open your docker desktop's settings -> Resources -> File Sharing and in the "Virtual file shares" section add the project root folder to the list.
 
 ## 3. Tweak DB Permissions
 To be able to create a project, you need to configure a couple things.
@@ -24,7 +24,7 @@ In the Admin page go to:
 5. Click to expand ```Project``` tab and enable "create" and "find" permissions
 6. Click ```Save``` on the right top corner
 
-## 4. Start testing
+## 4. Start Testing
 Projects Dashboard: ```http://localhost:3000```
 
 For the DB admin view: ```http://localhost:1337/admin``` 
