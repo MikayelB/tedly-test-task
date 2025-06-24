@@ -29,13 +29,20 @@ const NewProjectModal = ({
 
   const [employees, setEmployees] = useState<Employee[]>([]);
 
-  useEffect(() => {
-    if (isOpen) {
-      getEmployees().then((res) => setEmployees(res));
+useEffect(() => {
+  if (isOpen) {
+    getEmployees()
+      .then((res) => {
+        setEmployees(res ?? []);
+        console.log("Employees:", res);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch employees", err);
+        setEmployees([]);
+      });
+  }
+}, [isOpen]);
 
-      console.log("Employees:", employees);
-    }
-  }, [isOpen]);
 
   if (!isOpen) return null;
   const isFormValid = formData.name.trim() !== "";

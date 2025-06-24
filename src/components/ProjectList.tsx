@@ -18,8 +18,13 @@ const ProjectList = () => {
 
   useEffect(() => {
     const fetchProjects = async () => {
-      const response = await getProjects();
-      setProjects(response);
+      try {
+        const response = await getProjects();
+        setProjects(response ?? []);
+      } catch (err) {
+        console.error("Failed to fetch projects:", err);
+        setProjects([]);
+      }
     };
 
     fetchProjects();
