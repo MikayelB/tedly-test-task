@@ -5,6 +5,11 @@ const BASE_URL = "http://localhost:1337/api";
 // Get all projects
 export async function getProjects(): Promise<Project[]> {
   const res = await fetch(`${BASE_URL}/projects?populate=assignee`);
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch projects: ${res.status}`);
+  }
+
   const json: { data: Project[] } = await res.json();
   return json.data;
 }
@@ -19,6 +24,10 @@ export async function addProject(project: Project): Promise<Project> {
     body: JSON.stringify({ data: project }),
   });
 
+  if (!res.ok) {
+    throw new Error(`Failed to create project: ${res.status}`);
+  }
+
   const json: { data: Project } = await res.json();
   return json.data;
 }
@@ -26,12 +35,20 @@ export async function addProject(project: Project): Promise<Project> {
 // Get all employees
 export async function getEmployees(): Promise<Employee[]> {
   const res = await fetch(`${BASE_URL}/employees`);
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch employees: ${res.status}`);
+  }
+
   const json: { data: Employee[] } = await res.json();
   return json.data;
 }
 
 // Add a new employee
-export async function addEmployee(firstName: string, lastName: string): Promise<Employee> {
+export async function addEmployee(
+  firstName: string,
+  lastName: string
+): Promise<Employee> {
   const res = await fetch(`${BASE_URL}/employees`, {
     method: "POST",
     headers: {
@@ -44,6 +61,10 @@ export async function addEmployee(firstName: string, lastName: string): Promise<
       },
     }),
   });
+
+  if (!res.ok) {
+    throw new Error(`Failed to create employee: ${res.status}`);
+  }
 
   const json: { data: Employee } = await res.json();
   return json.data;
