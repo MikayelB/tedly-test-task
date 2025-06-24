@@ -1,17 +1,12 @@
-import type { AppProps } from 'next/app';
-import Head from "next/head";
+import type { AppProps } from "next/app";
+import { Provider } from "react-redux";
+import { store } from "../store";
+import "../styles/globals.css";
 
-import '../styles/globals.css';
-
-const TestTaskApp = ({ Component, pageProps }: AppProps) => {
+export default function App({ Component, pageProps }: AppProps) {
   return (
-    <>
-      <Head>
-        <title>Dashboard</title>
-      </Head>
+    <Provider store={store}>
       <Component {...pageProps} />
-    </>
+    </Provider>
   );
-};
-
-export default TestTaskApp;
+}

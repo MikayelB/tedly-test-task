@@ -25,7 +25,6 @@ export interface Project {
   property: string;
   unit: string;
   room: string;
-
   price: number | null;
   note: string;
   assignee: Employee | null;

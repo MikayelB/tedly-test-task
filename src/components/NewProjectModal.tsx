@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { addEmployee, getEmployees } from "../lib/api";
+import { useAppDispatch } from "../store/hooks";
+import { createProject } from "../store/slices/projectsSlice";
 import { Employee } from "../types/strapi";
 
 interface NewProjectModalProps {
@@ -13,6 +15,8 @@ const NewProjectModal = ({
   onClose,
   onSubmit,
 }: NewProjectModalProps) => {
+  const dispatch = useAppDispatch();
+
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -29,20 +33,11 @@ const NewProjectModal = ({
 
   const [employees, setEmployees] = useState<Employee[]>([]);
 
-useEffect(() => {
-  if (isOpen) {
-    getEmployees()
-      .then((res) => {
-        setEmployees(res ?? []);
-        console.log("Employees:", res);
-      })
-      .catch((err) => {
-        console.error("Failed to fetch employees", err);
-        setEmployees([]);
-      });
-  }
-}, [isOpen]);
-
+  useEffect(() => {
+    if (isOpen) {
+      getEmployees().then((res) => setEmployees(res));
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
   const isFormValid = formData.name.trim() !== "";
@@ -86,7 +81,7 @@ useEffect(() => {
                 try {
                   const newEmp = await addEmployee(firstName, lastName);
                   assigneeId = newEmp.id;
-                  setEmployees((prev) => [...prev, newEmp]); // optional update
+                  setEmployees((prev) => [...prev, newEmp]);
                 } catch (err) {
                   alert("Failed to create employee.");
                   console.error(err);
@@ -122,8 +117,12 @@ useEffect(() => {
                 formData.price.trim() === "" ? null : parseInt(formData.price),
             };
 
-            onSubmit(projectData);
-            onClose();
+            try {
+              await dispatch(createProject(projectData)).unwrap();
+              onClose();
+            } catch (err) {
+              console.error("Failed to create project:", err);
+            }
           }}
         >
           <div className="space-y-4">

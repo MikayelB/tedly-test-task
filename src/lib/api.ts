@@ -11,7 +11,7 @@ export async function getProjects(): Promise<Project[]> {
 
 // Add a new project
 export async function addProject(project: Project): Promise<Project> {
-  const res = await fetch(`${BASE_URL}/projects`, {
+  const res = await fetch(`${BASE_URL}/projects?populate=assignee`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

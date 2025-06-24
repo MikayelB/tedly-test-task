@@ -3,7 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 // import { mockProjects } from "../../data/mockProjects";
 import PlusSign from "../icons/plus-sign.svg";
-import { addProject, getProjects } from "../lib/api";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { createProject, fetchProjects } from "../store/slices/projectsSlice";
 import { Project } from "../types/strapi";
 import FilterButtons from "./FilterButtons";
 import NewProjectModal from "./NewProjectModal";
@@ -11,30 +12,23 @@ import ProjectRow from "./ProjectRow";
 import SearchButton from "./SearchButton";
 
 const ProjectList = () => {
-  const [projects, setProjects] = useState<Project[]>([]);
+  const dispatch = useAppDispatch();
+  const { projects, loading, error } = useAppSelector(
+    (state) => state.projects
+  );
+
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const response = await getProjects();
-        setProjects(response ?? []);
-      } catch (err) {
-        console.error("Failed to fetch projects:", err);
-        setProjects([]);
-      }
-    };
-
-    fetchProjects();
-  }, []);
+    dispatch(fetchProjects());
+  }, [dispatch]);
 
   const handleCreateProject = async (projectData: Project) => {
     try {
-      await addProject(projectData);
-      const updatedProjects = await getProjects();
-      setProjects(updatedProjects);
+      await dispatch(createProject(projectData)).unwrap();
+      dispatch(fetchProjects());
     } catch (err) {
       console.error("Failed to create project:", err);
     }
@@ -69,6 +63,22 @@ const ProjectList = () => {
   }, [projects, activeFilter, searchTerm]);
 
   const counts = getStatusCounts();
+
+  if (loading) {
+    return (
+      <div className="p-6 flex justify-center items-center">
+        <div>Loading projects...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-6 flex justify-center items-center">
+        <div className="text-red-600">Error: {error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6">
