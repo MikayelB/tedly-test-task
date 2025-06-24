@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: strapi-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: dashboard_user
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: project_dashboard
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build:
+      context: ./backend
+    container_name: strapi-backend
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      APP_KEYS: your-app-keys-here
+      API_TOKEN_SALT: your-api-token-salt
+      ADMIN_JWT_SECRET: your-admin-jwt-secret
+      JWT_SECRET: your-jwt-secret
+      DATABASE_CLIENT: postgres
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: project_dashboard
+      DATABASE_USERNAME: dashboard_user
+      DATABASE_PASSWORD: admin
+
+    ports:
+      - "1337:1337"
+    volumes:
+      - ./backend:/app
+    command: npm run develop
+
+  frontend:
+    build:
+      context: . # root because frontend is here
+    container_name: frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    command: npm run dev
+
+volumes:
+  pgdata:
