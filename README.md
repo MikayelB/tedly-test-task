@@ -1,8 +1,8 @@
-## How to run the project
-### 1. Clone repo
+# How to run the project
+## 1. Clone repo
 ```git clone ...```
 
-### 2. Start services
+## 2. Start services
 Go to the project root and in terminal run:
 ```docker compose up --build```
 
@@ -11,7 +11,7 @@ Note: if you get an error like this
 
 Open your docker settings -> Resources -> File Sharing and in the "Virtual file shares" section add the project root folder to the list.
 
-### 3. Tweak DB Permissions
+## 3. Tweak DB Permissions
 To be able to create a project, you need to configure a couple things.
 
 Go to ```http://localhost:1337/admin``` and login with some random credentials. (use 10 minute mail to get a temporary email)
@@ -24,7 +24,7 @@ In the Admin page go to:
 5. Click to expand ```Project``` tab and enable "create" and "find" permissions
 6. Click ```Save``` on the right top corner
 
-### 4. Start testing
+## 4. Start testing
 Projects Dashboard: ```http://localhost:3000```
 
 For the DB admin view: ```http://localhost:1337/admin``` 
