@@ -25,7 +25,8 @@ export interface Project {
   property: string;
   unit: string;
   room: string;
-  price: string; // biginteger comes as string
+
+  price: number | null;
   note: string;
   assignee: Employee | null;
 }

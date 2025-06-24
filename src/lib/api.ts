@@ -29,3 +29,23 @@ export async function getEmployees(): Promise<Employee[]> {
   const json: { data: Employee[] } = await res.json();
   return json.data;
 }
+
+// Add a new employee
+export async function addEmployee(firstName: string, lastName: string): Promise<Employee> {
+  const res = await fetch(`${BASE_URL}/employees`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      data: {
+        firstName,
+        lastName,
+      },
+    }),
+  });
+
+  const json: { data: Employee } = await res.json();
+  return json.data;
+}
+

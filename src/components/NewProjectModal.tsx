@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getEmployees } from "../lib/api";
+import { addEmployee, getEmployees } from "../lib/api";
 import { Employee } from "../types/strapi";
 
 interface NewProjectModalProps {
@@ -38,6 +38,7 @@ const NewProjectModal = ({
   }, [isOpen]);
 
   if (!isOpen) return null;
+  const isFormValid = formData.name.trim() !== "";
 
   return (
     <div
@@ -54,12 +55,36 @@ const NewProjectModal = ({
 
             let assigneeId: number | null = null;
 
-            if (formData.assignee !== "") {
-              assigneeId = Number(formData.assignee);
+            if (formData.assignee.trim() !== "") {
+              const input = formData.assignee.trim();
 
-              if (!employees.find((emp) => emp.id === assigneeId)) {
-                alert("Invalid assignee selected.");
-                return;
+              // Try matching an existing employee
+              const matched = employees.find(
+                (emp) =>
+                  `${emp.firstName} ${emp.lastName}`.toLowerCase() ===
+                  input.toLowerCase()
+              );
+
+              if (matched) {
+                assigneeId = matched.id;
+              } else {
+                // creating a new employee
+                const parts = input.split(" ");
+                if (parts.length !== 2) {
+                  alert("Please enter full name (John Doe)");
+                  return;
+                }
+
+                const [firstName, lastName] = parts;
+                try {
+                  const newEmp = await addEmployee(firstName, lastName);
+                  assigneeId = newEmp.id;
+                  setEmployees((prev) => [...prev, newEmp]); // optional update
+                } catch (err) {
+                  alert("Failed to create employee.");
+                  console.error(err);
+                  return;
+                }
               }
             }
 
@@ -86,9 +111,11 @@ const NewProjectModal = ({
                 new Date().toISOString().split("T")[0],
               stage: getRandom(stages),
               projectStatus: getRandom(statuses),
+              price:
+                formData.price.trim() === "" ? null : parseInt(formData.price),
             };
 
-            await onSubmit(projectData);
+            onSubmit(projectData);
             onClose();
           }}
         >
@@ -110,24 +137,24 @@ const NewProjectModal = ({
                 setFormData({ ...formData, description: e.target.value })
               }
             />
-            <select
+            <input
+              list="assignee-options"
+              type="text"
+              placeholder="Assignee (select or type new)"
               className="w-full p-2 border rounded"
               value={formData.assignee}
               onChange={(e) =>
                 setFormData({ ...formData, assignee: e.target.value })
               }
-            >
-              <option value="">Select Assignee</option>
-              {employees.length > 0 ? (
-                employees.map((emp) => (
-                  <option key={emp.id} value={emp.id.toString()}>
-                    {emp.firstName} {emp.lastName}
-                  </option>
-                ))
-              ) : (
-                <option disabled>No employees found</option>
-              )}
-            </select>
+            />
+            <datalist id="assignee-options">
+              {employees.map((emp) => (
+                <option
+                  key={emp.id}
+                  value={`${emp.firstName} ${emp.lastName}`}
+                />
+              ))}
+            </datalist>
 
             <div className="grid grid-cols-3 gap-4">
               <input
@@ -178,15 +205,13 @@ const NewProjectModal = ({
           </div>
           <div className="flex justify-end gap-2 mt-6">
             <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded"
-            >
-              Cancel
-            </button>
-            <button
               type="submit"
-              className="px-4 py-2 bg-gray-900 text-white rounded hover:bg-gray-800"
+              disabled={!isFormValid}
+              className={`px-4 py-2 rounded text-white ${
+                isFormValid
+                  ? "bg-gray-900 hover:bg-gray-800"
+                  : "bg-gray-400 cursor-not-allowed"
+              }`}
             >
               Create Project
             </button>
