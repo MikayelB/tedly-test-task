@@ -6,7 +6,7 @@
 Go to the project root and in terminal run:
 ```docker compose up --build```
 
-Note: if you get an error like this 
+**Note**: if you get an error like this 
 ```...tedly-test-task is not shared from the host and is not known to Docker```
 
 Open your docker desktop's settings -> Resources -> File Sharing and in the "Virtual file shares" section add the project root folder to the list.
