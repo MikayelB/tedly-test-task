@@ -29,6 +29,8 @@ Projects Dashboard: ```http://localhost:3000```
 
 For the DB admin view: ```http://localhost:1337/admin``` 
 
+**Note**: Environment variables are included for easy testing and there are no real secrets.
+
 ---------------------------
 # Initial Project Instructions
 # What is it?
