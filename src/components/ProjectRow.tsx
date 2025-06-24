@@ -1,12 +1,11 @@
 ("use client");
 
-import { Project } from "../../data/mockProjects";
 import Arrow from "../icons/arrow-data-transfer-horizontal.svg";
 import CopyBtn from "../icons/copy.svg";
 import UserBlank from "../icons/user-multiple.svg";
+import { Project } from "../types/strapi";
 import Avatar from "./Avatar";
 import ProgressBar from "./ProgressBar";
-
 
 interface ProjectRowProps {
   project: Project;
@@ -27,7 +26,7 @@ const ProjectRow = ({ project }: ProjectRowProps) => {
             {project.description}
           </div>
           <div className="flex items-center gap-2 py-[6px] leading-none text-xs font-medium text-gray-500">
-            {project.date}
+            {project.registrationDate}
             <Arrow />
           </div>
         </div>
@@ -43,9 +42,13 @@ const ProjectRow = ({ project }: ProjectRowProps) => {
                   : "justify-center"
               } items-center w-full`}
             >
-              <Avatar name={project.assignee} />
+              <Avatar
+                name={`${project.assignee.firstName ?? ""} ${
+                  project.assignee.lastName ?? ""
+                }`}
+              />{" "}
               <span className="hidden xl:inline text-sm font-medium text-gray-800">
-                {project.assignee}
+                {project.assignee.firstName} {project.assignee.lastName}
               </span>
             </div>
           ) : (

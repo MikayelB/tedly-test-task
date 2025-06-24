@@ -376,7 +376,7 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
 export interface ApiEmployeeEmployee extends Struct.CollectionTypeSchema {
   collectionName: 'employees';
   info: {
-    displayName: 'Employee';
+    displayName: 'employee';
     pluralName: 'employees';
     singularName: 'employee';
   };
@@ -387,8 +387,8 @@ export interface ApiEmployeeEmployee extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    FirstName: Schema.Attribute.String;
-    LastName: Schema.Attribute.String;
+    firstName: Schema.Attribute.String;
+    lastName: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -406,7 +406,7 @@ export interface ApiEmployeeEmployee extends Struct.CollectionTypeSchema {
 export interface ApiProjectProject extends Struct.CollectionTypeSchema {
   collectionName: 'projects';
   info: {
-    displayName: 'Project';
+    displayName: 'project';
     pluralName: 'projects';
     singularName: 'project';
   };
@@ -418,8 +418,7 @@ export interface ApiProjectProject extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    Date: Schema.Attribute.Date;
-    Description: Schema.Attribute.Text;
+    description: Schema.Attribute.Text;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -427,13 +426,26 @@ export interface ApiProjectProject extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     name: Schema.Attribute.String;
-    Note: Schema.Attribute.Text;
-    Price: Schema.Attribute.BigInteger;
-    Property: Schema.Attribute.Text;
+    note: Schema.Attribute.Text;
+    price: Schema.Attribute.BigInteger;
+    projectStatus: Schema.Attribute.Enumeration<
+      ['active', 'completed', 'archived']
+    >;
+    property: Schema.Attribute.Text;
     publishedAt: Schema.Attribute.DateTime;
-    Room: Schema.Attribute.String;
-    Stage: Schema.Attribute.String;
-    Unit: Schema.Attribute.String;
+    registrationDate: Schema.Attribute.Date;
+    room: Schema.Attribute.String;
+    stage: Schema.Attribute.Enumeration<
+      [
+        'Project created',
+        'Documents uploaded',
+        'Start date confirmed',
+        'In progress',
+        'Under review',
+        'Completed',
+      ]
+    >;
+    unit: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

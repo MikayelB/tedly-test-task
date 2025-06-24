@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getEmployees } from "../lib/api";
+import { Employee } from "../types/strapi";
 
 interface NewProjectModalProps {
   isOpen: boolean;
@@ -14,13 +16,26 @@ const NewProjectModal = ({
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    assignee: "",
+    registrationDate: "",
+    projectStatus: "active",
+    stage: "Project created",
     property: "",
     unit: "",
     room: "",
     price: "",
     note: "",
+    assignee: "",
   });
+
+  const [employees, setEmployees] = useState<Employee[]>([]);
+
+  useEffect(() => {
+    if (isOpen) {
+      getEmployees().then((res) => setEmployees(res));
+
+      console.log("Employees:", employees);
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -34,9 +49,46 @@ const NewProjectModal = ({
       <div className="bg-white rounded-lg p-6 w-[500px]">
         <h2 className="text-xl font-semibold mb-4">Add New Project</h2>
         <form
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            onSubmit(formData);
+
+            let assigneeId: number | null = null;
+
+            if (formData.assignee !== "") {
+              assigneeId = Number(formData.assignee);
+
+              if (!employees.find((emp) => emp.id === assigneeId)) {
+                alert("Invalid assignee selected.");
+                return;
+              }
+            }
+
+            /* !!!-------For testing purposes, generates the stage and status at random-------!!! */
+            const stages = [
+              "Project created",
+              "Documents uploaded",
+              "Start date confirmed",
+              "In progress",
+              "Under review",
+              "Completed",
+            ];
+
+            const statuses = ["active", "completed", "archived"];
+
+            const getRandom = <T,>(arr: T[]): T =>
+              arr[Math.floor(Math.random() * arr.length)];
+
+            const projectData = {
+              ...formData,
+              assignee: assigneeId,
+              registrationDate:
+                formData.registrationDate ||
+                new Date().toISOString().split("T")[0],
+              stage: getRandom(stages),
+              projectStatus: getRandom(statuses),
+            };
+
+            await onSubmit(projectData);
             onClose();
           }}
         >
@@ -58,15 +110,25 @@ const NewProjectModal = ({
                 setFormData({ ...formData, description: e.target.value })
               }
             />
-            <input
-              type="text"
-              placeholder="Assignee"
+            <select
               className="w-full p-2 border rounded"
               value={formData.assignee}
               onChange={(e) =>
                 setFormData({ ...formData, assignee: e.target.value })
               }
-            />
+            >
+              <option value="">Select Assignee</option>
+              {employees.length > 0 ? (
+                employees.map((emp) => (
+                  <option key={emp.id} value={emp.id.toString()}>
+                    {emp.firstName} {emp.lastName}
+                  </option>
+                ))
+              ) : (
+                <option disabled>No employees found</option>
+              )}
+            </select>
+
             <div className="grid grid-cols-3 gap-4">
               <input
                 type="text"

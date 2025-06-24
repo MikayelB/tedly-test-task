@@ -4,7 +4,7 @@
   "info": {
     "singularName": "project",
     "pluralName": "projects",
-    "displayName": "Project"
+    "displayName": "project"
   },
   "options": {
     "draftAndPublish": true
@@ -14,35 +14,48 @@
     "name": {
       "type": "string"
     },
-    "Description": {
+    "description": {
       "type": "text"
     },
-    "Date": {
+    "registrationDate": {
       "type": "date"
     },
-    "Stage": {
-      "type": "string"
+    "projectStatus": {
+      "type": "enumeration",
+      "enum": ["active", "completed", "archived"]
     },
-    "Property": {
+    "stage": {
+      "type": "enumeration",
+      "enum": [
+        "Project created",
+        "Documents uploaded",
+        "Start date confirmed",
+        "In progress",
+        "Under review",
+        "Completed"
+      ]
+    },
+    "property": {
       "type": "text"
     },
-    "Unit": {
+    "unit": {
       "type": "string"
     },
-    "Room": {
+    "room": {
       "type": "string"
     },
-    "Price": {
+    "price": {
       "type": "biginteger"
     },
-    "Note": {
+    "note": {
       "type": "text"
     },
     "assignee": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::employee.employee",
-      "inversedBy": "projects"
+      "inversedBy": "projects",
+      "required": false
     }
   }
 }

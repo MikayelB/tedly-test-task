@@ -1,6 +1,6 @@
 "use client";
 
-const STAGES = [
+const stages = [
   "Project created",
   "Documents uploaded",
   "Start date confirmed",
@@ -14,7 +14,7 @@ type ProgressBarProps = {
 };
 
 const ProgressBar = ({ currentStage }: ProgressBarProps) => {
-  const currentIndex = STAGES.indexOf(currentStage);
+  const currentIndex = stages.indexOf(currentStage);
 
   return (
     <div className="flex flex-col w-full max-w-[145px] max-h-[48px] gap-2">
@@ -24,10 +24,10 @@ const ProgressBar = ({ currentStage }: ProgressBarProps) => {
         </p>
       </div>
       <div className="grid grid-cols-6 w-full h-[3px] rounded-full overflow-hidden">
-        {STAGES.map((stage, i) => {
+        {stages.map((stage, i) => {
           const filled = i < currentIndex;
           const active = i === currentIndex;
-          const isLast = i === STAGES.length - 1;
+          const isLast = i === stages.length - 1;
 
           return (
             <div

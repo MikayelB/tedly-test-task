@@ -1,47 +1,69 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { mockProjects } from "../../data/mockProjects";
+import { useEffect, useMemo, useState } from "react";
+// import { mockProjects } from "../../data/mockProjects";
 import PlusSign from "../icons/plus-sign.svg";
+import { addProject, getProjects } from "../lib/api";
+import { Project } from "../types/strapi";
 import FilterButtons from "./FilterButtons";
 import NewProjectModal from "./NewProjectModal";
 import ProjectRow from "./ProjectRow";
 import SearchButton from "./SearchButton";
 
-const getStatusCounts = () => {
-  const all = mockProjects.length;
-
-  const active = mockProjects.filter((p) => p.status === "active").length;
-  const completed = mockProjects.filter((p) => p.status === "completed").length;
-  const archived = mockProjects.filter((p) => p.status === "archived").length;
-
-  return { all, active, completed, archived };
-};
-
 const ProjectList = () => {
+  const [projects, setProjects] = useState<Project[]>([]);
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const counts = getStatusCounts();
 
-  const handleCreateProject = (projectData: any) => {
-    // Add API call later
-    console.log("Creating project:", projectData);
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const response = await getProjects();
+      setProjects(response);
+    };
+
+    fetchProjects();
+  }, []);
+
+  const handleCreateProject = async (projectData: Project) => {
+    try {
+      await addProject(projectData);
+      const updatedProjects = await getProjects();
+      setProjects(updatedProjects);
+    } catch (err) {
+      console.error("Failed to create project:", err);
+    }
+  };
+
+  const getStatusCounts = () => {
+    const all = projects.length;
+    const active = projects.filter((p) => p.projectStatus === "active").length;
+    const completed = projects.filter(
+      (p) => p.projectStatus === "completed"
+    ).length;
+    const archived = projects.filter(
+      (p) => p.projectStatus === "archived"
+    ).length;
+
+    return { all, active, completed, archived };
   };
 
   const filteredProjects = useMemo(() => {
-    let projects =
+    let filtered =
       activeFilter === "all"
-        ? mockProjects
-        : mockProjects.filter((project) => project.status === activeFilter);
+        ? projects
+        : projects.filter((p) => p.projectStatus === activeFilter);
 
     if (searchTerm) {
-      projects = projects.filter((project) =>
-        project.name.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter((p) =>
+        p.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-    return projects;
-  }, [activeFilter, searchTerm]);
+
+    return filtered;
+  }, [projects, activeFilter, searchTerm]);
+
+  const counts = getStatusCounts();
 
   return (
     <div className="p-6">
